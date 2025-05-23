@@ -3,7 +3,7 @@ title: "Clear sky UV graph"
 format: html
 ---
 
-```{R}
+```{r}
 
 library(httr)
 library(jsonlite)
@@ -34,7 +34,6 @@ if (status_code(response) == 200) {
 
 df <- result$result |>
     dplyr::mutate(uv_time = ymd_hms(uv_time))
-
  
 df |>
     ggplot(aes(x = uv_time, y = uv, group = 1)) +
