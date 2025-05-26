@@ -50,9 +50,6 @@ jobs:
             jsonlite
             ggplot2
             lubridate
-            # Add all other R packages your document uses
-          # You might need to specify CRAN explicitly if you have issues:
-          # repos: https://cran.rstudio.com/
           
       - name: Render Quarto document
         run: |
