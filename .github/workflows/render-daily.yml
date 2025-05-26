@@ -27,7 +27,8 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: 'latest' # Or a specific version like '1.4.554' to match your local
+          version: '1.7.31' # Replace with the latest valid version or the version you use locally
+
 
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
