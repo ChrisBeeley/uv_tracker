@@ -149,7 +149,7 @@ Attaching package: 'lubridate'</code></pre>
 
     date, intersect, setdiff, union</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>api_key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"API"</span>)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>api_key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"MY_API_KEY_ENV"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># api_key &lt;- readLines("api-key")</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -173,85 +173,24 @@ Attaching package: 'lubridate'</code></pre>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Handle errors</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Error:"</span>, <span class="fu">status_code</span>(response), <span class="fu">content</span>(response, <span class="st">"text"</span>)))</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Error: 403 {\"error\":\"No API Key provided\"}"</code></pre>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#print(str(response))</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> result<span class="sc">$</span>result <span class="sc">|&gt;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">uv_time =</span> <span class="fu">ymd_hms</span>(uv_time))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> uv_time, <span class="at">y =</span> uv, <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">str</span>(response))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 10
- $ url        : chr "https://api.openuv.io/api/v1/forecast?lat=52.98&amp;lng=-1.16&amp;alt=100&amp;dt="
- $ status_code: int 403
- $ headers    :List of 13
-  ..$ access-control-allow-origin: chr "*"
-  ..$ content-type               : chr "application/json; charset=utf-8"
-  ..$ date                       : chr "Mon, 26 May 2025 15:49:28 GMT"
-  ..$ etag                       : chr "W/\"1f-CZEapy/FeOIkCdFIYCZa/F2PdQY\""
-  ..$ nel                        : chr "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failu"| __truncated__
-  ..$ report-to                  : chr "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=ycnvXxoysEYQRRmecFDW0AcwVh"| __truncated__
-  ..$ reporting-endpoints        : chr "heroku-nel=\"https://nel.heroku.com/reports?s=ycnvXxoysEYQRRmecFDW0AcwVhED3yTCnKJtz4WPH0U%3D&amp;sid=67ff5de4-ad2b-"| __truncated__
-  ..$ server                     : chr "Heroku"
-  ..$ via                        : chr "2.0 heroku-router"
-  ..$ x-powered-by               : chr "Express"
-  ..$ x-ratelimit-limit          : chr "50"
-  ..$ x-ratelimit-remaining      : chr "49"
-  ..$ content-length             : chr "31"
-  ..- attr(*, "class")= chr [1:2] "insensitive" "list"
- $ all_headers:List of 1
-  ..$ :List of 3
-  .. ..$ status : int 403
-  .. ..$ version: chr "HTTP/2"
-  .. ..$ headers:List of 13
-  .. .. ..$ access-control-allow-origin: chr "*"
-  .. .. ..$ content-type               : chr "application/json; charset=utf-8"
-  .. .. ..$ date                       : chr "Mon, 26 May 2025 15:49:28 GMT"
-  .. .. ..$ etag                       : chr "W/\"1f-CZEapy/FeOIkCdFIYCZa/F2PdQY\""
-  .. .. ..$ nel                        : chr "{\"report_to\":\"heroku-nel\",\"response_headers\":[\"Via\"],\"max_age\":3600,\"success_fraction\":0.01,\"failu"| __truncated__
-  .. .. ..$ report-to                  : chr "{\"group\":\"heroku-nel\",\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?s=ycnvXxoysEYQRRmecFDW0AcwVh"| __truncated__
-  .. .. ..$ reporting-endpoints        : chr "heroku-nel=\"https://nel.heroku.com/reports?s=ycnvXxoysEYQRRmecFDW0AcwVhED3yTCnKJtz4WPH0U%3D&amp;sid=67ff5de4-ad2b-"| __truncated__
-  .. .. ..$ server                     : chr "Heroku"
-  .. .. ..$ via                        : chr "2.0 heroku-router"
-  .. .. ..$ x-powered-by               : chr "Express"
-  .. .. ..$ x-ratelimit-limit          : chr "50"
-  .. .. ..$ x-ratelimit-remaining      : chr "49"
-  .. .. ..$ content-length             : chr "31"
-  .. .. ..- attr(*, "class")= chr [1:2] "insensitive" "list"
- $ cookies    :'data.frame':    0 obs. of  7 variables:
-  ..$ domain    : logi(0) 
-  ..$ flag      : logi(0) 
-  ..$ path      : logi(0) 
-  ..$ secure    : logi(0) 
-  ..$ expiration: 'POSIXct' num(0) 
-  ..$ name      : logi(0) 
-  ..$ value     : logi(0) 
- $ content    : raw [1:31] 7b 22 65 72 ...
- $ date       : POSIXct[1:1], format: "2025-05-26 15:49:28"
- $ times      : Named num [1:6] 0 0.0024 0.0233 0.0474 0.0699 ...
-  ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
- $ request    :List of 7
-  ..$ method    : chr "GET"
-  ..$ url       : chr "https://api.openuv.io/api/v1/forecast?lat=52.98&amp;lng=-1.16&amp;alt=100&amp;dt="
-  ..$ headers   : Named chr [1:3] "application/json, text/xml, application/xml, */*" "" "application/json"
-  .. ..- attr(*, "names")= chr [1:3] "Accept" "x-access-token" "Content-Type"
-  ..$ fields    : NULL
-  ..$ options   :List of 2
-  .. ..$ useragent: chr "libcurl/8.5.0 r-curl/6.2.3 httr/1.4.7"
-  .. ..$ httpget  : logi TRUE
-  ..$ auth_token: NULL
-  ..$ output    : list()
-  .. ..- attr(*, "class")= chr [1:2] "write_memory" "write_function"
-  ..- attr(*, "class")= chr "request"
- $ handle     :Class 'curl_handle' &lt;externalptr&gt; 
- - attr(*, "class")= chr "response"
-NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#df &lt;- result$result |&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#    dplyr::mutate(uv_time = ymd_hms(uv_time))</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#df |&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#    ggplot(aes(x = uv_time, y = uv, group = 1)) +</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#    geom_point() +</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#    geom_line()  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
