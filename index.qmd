@@ -36,14 +36,14 @@ if (status_code(response) == 200) {
   print(paste("Error:", status_code(response), content(response, "text")))
 }
 
-print(str(response))
+#print(str(response))
 
-#df <- result$result |>
-#    dplyr::mutate(uv_time = ymd_hms(uv_time))
+df <- result$result |>
+    dplyr::mutate(uv_time = ymd_hms(uv_time))
  
-#df |>
-#    ggplot(aes(x = uv_time, y = uv, group = 1)) +
-#    geom_point() +
-#    geom_line()  
+df |>
+    ggplot(aes(x = uv_time, y = uv, group = 1)) +
+    geom_point() +
+    geom_line()  
 
 ```
