@@ -10,7 +10,7 @@ library(jsonlite)
 library(ggplot2)
 library(lubridate)
 
-api_key <- Sys.getenv("API")
+api_key <- Sys.getenv("MY_API_KEY_ENV")
 
 # api_key <- readLines("api-key")
 
