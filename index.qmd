@@ -36,7 +36,7 @@ if (status_code(response) == 200) {
   print(paste("Error:", status_code(response), content(response, "text")))
 }
 
-print(str(response)))
+print(str(response))
 
 #df <- result$result |>
 #    dplyr::mutate(uv_time = ymd_hms(uv_time))
