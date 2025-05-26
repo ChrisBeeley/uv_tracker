@@ -30,18 +30,20 @@ response <- GET(url, my_headers)
 if (status_code(response) == 200) {
   # Parse the JSON response
   result <- fromJSON(content(response, "text", encoding = "UTF-8"))
-  print(result)
+  #print(result)
 } else {
   # Handle errors
   print(paste("Error:", status_code(response), content(response, "text")))
 }
 
-df <- result$result |>
-    dplyr::mutate(uv_time = ymd_hms(uv_time))
+print(str(response)))
+
+#df <- result$result |>
+#    dplyr::mutate(uv_time = ymd_hms(uv_time))
  
-df |>
-    ggplot(aes(x = uv_time, y = uv, group = 1)) +
-    geom_point() +
-    geom_line()  
+#df |>
+#    ggplot(aes(x = uv_time, y = uv, group = 1)) +
+#    geom_point() +
+#    geom_line()  
 
 ```
