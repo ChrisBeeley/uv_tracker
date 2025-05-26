@@ -53,7 +53,7 @@ jobs:
           
       - name: Render Quarto document
         run: |
-          quarto test.qmd # Replace with your document name or 'quarto render .' for a project
+          quarto render test.qmd # Replace with your document name or 'quarto render .' for a project
 
       - name: Commit and push changes
         # Only if you want to commit the rendered output back to the same branch
