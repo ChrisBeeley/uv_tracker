@@ -1,0 +1,69 @@
+
+name: Render Quarto Document Daily
+
+on:
+  schedule:
+    # Run every day at 12:00 PM UTC (adjust as needed using crontab guru)
+    # This is 1 PM BST during British Summer Time.
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  build-and-render:
+    runs-on: ubuntu-latest # Or macos-latest if you have specific needs
+
+    env:
+      RENV_PATHS_ROOT: ~/.local/share/renv # Good for renv if used
+
+    permissions:
+      contents: write # Needed to commit the rendered output back to the repo
+      pages: write # If publishing to GitHub Pages
+      id-token: write # If publishing to GitHub Pages
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 'latest' # Or a specific version like '1.4.554' to match your local
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.x' # Or a specific R version like '4.3.2'
+          use-public-rspm: true # Recommended for faster package installation
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # If you use renv:
+          # dependencies: |
+          #   renv
+          #   # Add other packages here if renv is not managing everything
+          # See https://r-lib.github.io/actions/articles/cache.html for caching renv
+          # If not using renv, list your packages:
+          packages: |
+            httr
+            jsonlite
+            ggplot2
+            lubridate
+            # Add all other R packages your document uses
+          # You might need to specify CRAN explicitly if you have issues:
+          # repos: https://cran.rstudio.com/
+          
+      - name: Render Quarto document
+        run: |
+          quarto test.qmd # Replace with your document name or 'quarto render .' for a project
+
+      - name: Commit and push changes
+        # Only if you want to commit the rendered output back to the same branch
+        # If publishing to GitHub Pages, this step might be different or not needed if
+        # the Quarto publish action handles it.
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Automated Quarto render" || echo "No changes to commit"
+          git push origin || echo "No changes to push"
