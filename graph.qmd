@@ -10,9 +10,11 @@ library(jsonlite)
 library(ggplot2)
 library(lubridate)
 
+api_key <- Sys.getenv("API")
+
 # Set up the headers
 my_headers <- add_headers(
-  "x-access-token" = readLines("api-key"),
+  "x-access-token" = api_key,
   "Content-Type" = "application/json"
 )
 
