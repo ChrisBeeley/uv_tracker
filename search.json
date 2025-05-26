@@ -1,9 +1,0 @@
-[
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Clear sky UV graph",
-    "section": "",
-    "text": "library(httr)\nlibrary(jsonlite)\nlibrary(ggplot2)\nlibrary(lubridate)\n\n\nAttaching package: 'lubridate'\n\n\nThe following objects are masked from 'package:base':\n\n    date, intersect, setdiff, union\n\napi_key &lt;- Sys.getenv(\"MY_API_KEY_ENV\")\n\n# api_key &lt;- readLines(\"api-key\")\n\n# Set up the headers\nmy_headers &lt;- add_headers(\n  \"x-access-token\" = api_key,\n  \"Content-Type\" = \"application/json\"\n)\n\n# Define the URL\nurl &lt;- \"https://api.openuv.io/api/v1/forecast?lat=52.98&lng=-1.16&alt=100&dt=\"\n\n# Make the GET request\nresponse &lt;- GET(url, my_headers)\n\n# Check the status code and content\nif (status_code(response) == 200) {\n  # Parse the JSON response\n  result &lt;- fromJSON(content(response, \"text\", encoding = \"UTF-8\"))\n  #print(result)\n} else {\n  # Handle errors\n  print(paste(\"Error:\", status_code(response), content(response, \"text\")))\n}\n\n#print(str(response))\n\ndf &lt;- result$result |&gt;\n    dplyr::mutate(uv_time = ymd_hms(uv_time))\n \ndf |&gt;\n    ggplot(aes(x = uv_time, y = uv, group = 1)) +\n    geom_point() +\n    geom_line()"
-  }
-]
