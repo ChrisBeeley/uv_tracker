@@ -54,7 +54,7 @@ jobs:
           
       - name: Render Quarto document
         run: |
-          quarto render test.qmd # Replace with your document name or 'quarto render .' for a project
+          quarto render . # Replace with your document name or 'quarto render .' for a project
 
       - name: Render and Publish Quarto site to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
