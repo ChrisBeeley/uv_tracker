@@ -1,3 +1,5 @@
 api-key
 *.html
 graph_files/*
+/.quarto/
+_site*

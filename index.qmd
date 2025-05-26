@@ -5,8 +5,43 @@ format: html
 
 ```{r}
 
-2 + 2
+library(httr)
+library(jsonlite)
+library(ggplot2)
+library(lubridate)
+
+api_key <- Sys.getenv("API")
+
+# api_key <- readLines("api-key")
+
+# Set up the headers
+my_headers <- add_headers(
+  "x-access-token" = api_key,
+  "Content-Type" = "application/json"
+)
+
+# Define the URL
+url <- "https://api.openuv.io/api/v1/forecast?lat=52.98&lng=-1.16&alt=100&dt="
+
+# Make the GET request
+response <- GET(url, my_headers)
+
+# Check the status code and content
+if (status_code(response) == 200) {
+  # Parse the JSON response
+  result <- fromJSON(content(response, "text", encoding = "UTF-8"))
+  print(result)
+} else {
+  # Handle errors
+  print(paste("Error:", status_code(response), content(response, "text")))
+}
+
+df <- result$result |>
+    dplyr::mutate(uv_time = ymd_hms(uv_time))
+ 
+df |>
+    ggplot(aes(x = uv_time, y = uv, group = 1)) +
+    geom_point() +
+    geom_line()  
 
 ```
-
-## Just testing
