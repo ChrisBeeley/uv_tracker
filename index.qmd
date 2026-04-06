@@ -1,5 +1,7 @@
 ---
 title: "Clear sky UV graph"
+date: today
+date-format: "DD MMMM YYYY"
 format: html
 execute:
   echo: false    # Hides all code (input)
