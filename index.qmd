@@ -47,9 +47,26 @@ if (status_code(response) == 200) {
 df <- result$result |>
     dplyr::mutate(uv_time = ymd_hms(uv_time))
  
-df |>
-    ggplot(aes(x = uv_time, y = uv, group = 1)) +
-    geom_point() +
-    geom_line()  
+library(scales) # Needed for better date/time formatting
+
+df <- result$result |> dplyr::mutate(uv_time = ymd_hms(uv_time)) 
+
+# Create the plot
+df |> ggplot(aes(x = uv_time, y = uv, group = 1)) + 
+  geom_point(color = "orange") + 
+  geom_line(color = "darkgrey") +
+  # Detailed X-axis configuration
+  scale_x_datetime(
+    date_breaks = "1 hour",          # Adds a label every hour
+    date_labels = "%H:%M",           # Shows time as 13:00, 14:00, etc.
+    minor_breaks = "30 mins"         # Adds small grid lines every 30 mins
+  ) +
+  labs(
+    title = paste("Detailed UV Forecast for", format(Sys.Date(), "%d %B %Y")),
+    x = "Time (24h Format)",
+    y = "UV Index"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5)) # Tilts text for better fit
 
 ```
